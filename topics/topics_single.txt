@@ -1,0 +1,4 @@
+2:lapiz perro
+3:mate perro casa
+4:lapiz perro casa hola
+5:(+lapiz +perro) casa

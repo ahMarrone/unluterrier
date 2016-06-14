@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="target">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/target/terrier-core-4.1-jar-with-dependencies.jar!/" />
+      <root url="jar://$PROJECT_DIR$/target/terrier-core-4.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

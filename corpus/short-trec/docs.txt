@@ -1,0 +1,12 @@
+<DOC>
+<DOCNO>1</DOCNO>
+hola casa perro
+</DOC>
+<DOC>
+<DOCNO>2</DOCNO>
+hola mate lapiz perro
+</DOC>
+<DOC>
+<DOCNO>3</DOCNO>
+lapiz casa perro mouse
+</DOC>
