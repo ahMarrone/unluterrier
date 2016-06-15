@@ -185,6 +185,25 @@
 
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>6.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>6.0.1</version> <!-- Should be snowball-20071024 -->
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.lucene</groupId>
+					<artifactId>lucene-core</artifactId>
+				</exclusion>
+			</exclusions>
+
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-snowball</artifactId>
 			<version>3.0.3</version> <!-- Should be snowball-20071024 -->
 			<exclusions>
@@ -375,7 +394,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!--<plugin>
 			  <artifactId>maven-dependency-plugin</artifactId>
 			    <executions>
@@ -391,9 +410,9 @@
 			  </executions>
 			</plugin> -->
 
-			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>build-helper-maven-plugin</artifactId> 
-				<executions> <execution> <id>add-source</id> <phase>generate-sources</phase> 
-				<goals> <goal>add-source</goal> </goals> <configuration> <sources> <source>${project.build.directory}/generated-sources/antlr/</source> 
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>build-helper-maven-plugin</artifactId>
+				<executions> <execution> <id>add-source</id> <phase>generate-sources</phase>
+				<goals> <goal>add-source</goal> </goals> <configuration> <sources> <source>${project.build.directory}/generated-sources/antlr/</source>
 				</sources> </configuration> </execution> </executions> </plugin> -->
 
 			<plugin>

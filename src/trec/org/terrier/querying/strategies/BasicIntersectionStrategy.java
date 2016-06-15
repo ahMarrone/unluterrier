@@ -14,13 +14,13 @@ public class BasicIntersectionStrategy implements IntersectionStrategy{
       } else {
           while (i < tokens.length){
             if (i == 0){
-              newQuery.append("(+"+tokens[i]+" +"+tokens[i+1]+")");
+              newQuery.append("("+tokens[i]+" AND "+tokens[i+1]+")");
               i++;
             } else if (i == tokens.length-1) {
-              newQuery.append(" +"+tokens[i]);
+              newQuery.append(" AND "+tokens[i]);
             } else {
               newQuery.insert(0,"(");
-              newQuery.append(" +"+tokens[i]+")");
+              newQuery.append(" AND "+tokens[i]+")");
             }
             i++;
           }

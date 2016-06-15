@@ -59,6 +59,7 @@ import org.terrier.structures.outputformat.NullOutputFormat;
 import org.terrier.utility.ApplicationSetup;
 import org.terrier.utility.ArrayUtils;
 import org.terrier.utility.Files;
+import org.apache.lucene.queryparser.classic.QueryParser;
 
 /**
  * This class performs a batch mode retrieval from a set of TREC queries.
