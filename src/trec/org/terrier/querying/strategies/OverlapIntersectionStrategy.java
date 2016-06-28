@@ -12,7 +12,10 @@ public class OverlapIntersectionStrategy implements IntersectionStrategy{
         newQuery.append(tokens[0]);
       } else {
           for (int i=0; i<tokens.length-1;i++){
-              newQuery.append("("+tokens[i]+" AND "+tokens[i+1]+")");
+              newQuery.append("( "+tokens[i]+" AND "+tokens[i+1]+" )");
+              if (i != tokens.length-2){
+                newQuery.append(" AND ");
+              }
           }
       }
       return newQuery.toString();
