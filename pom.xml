@@ -185,27 +185,8 @@
 
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-core</artifactId>
-			<version>6.0.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-queryparser</artifactId>
-			<version>6.0.1</version> <!-- Should be snowball-20071024 -->
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.lucene</groupId>
-					<artifactId>lucene-core</artifactId>
-				</exclusion>
-			</exclusions>
-
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-snowball</artifactId>
-			<version>3.0.3</version> <!-- Should be snowball-20071024 -->
+			<version>3.0.3</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.lucene</groupId>
