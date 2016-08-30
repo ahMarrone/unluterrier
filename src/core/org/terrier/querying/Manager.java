@@ -102,7 +102,7 @@ public class Manager
 	/** The default namespace for PreProcesses to be loaded from */
 	public static final String NAMESPACE_PREPROCESS
 		= "org.terrier.querying.";
-	
+
 	/** The default namespace for PostFilters to be loaded from */
 	public static final String NAMESPACE_POSTFILTER
 		= "org.terrier.querying.";
@@ -125,15 +125,15 @@ public class Manager
 	/** Cache loaded PostFitler models in this map */
 	protected Map<String, PostFilter> Cache_PostFilter = new HashMap<String, PostFilter>();
 	/* ------------------------------------------------*/
-	
+
 	/** TermPipeline processing */
 	protected TermPipelineAccessor tpa;
-	
+
 	/** The index this querying comes from */
 	protected Index index;
 	/** This contains a list of controls that may be set in the querying API */
 	protected Set<String> Allowed_Controls;
-	/** This contains the mapping of controls and their values that should be 
+	/** This contains the mapping of controls and their values that should be
 	  * set identially for each query created by this Manager */
 	protected Map<String, String> Default_Controls;
 	/** How many default controls exist.
@@ -143,16 +143,16 @@ public class Manager
 	/** An ordered list of post process names. The controls at the same index in the PostProcesses_Controls
 	  * list turn on the post process in this list. */
 	protected String[] PostProcesses_Order;
-	
+
 	/** A 2d array, contains (on 2nd level) the list of controls that turn on the PostProcesses
 	  * at the same 1st level place on PostProcesses_Order */
 	protected String[][] PostProcesses_Controls;
-	
+
 
 	/** An ordered list of post process names. The controls at the same index in the PostProcesses_Controls
 	  * list turn on the post process in this list. */
 	protected String[] PreProcesses_Order;
-	
+
 	/** A 2d array, contains (on 2nd level) the list of controls that turn on the PostProcesses
 	  * at the same 1st level place on PostProcesses_Order */
 	protected String[][] PreProcesses_Controls;
@@ -164,13 +164,13 @@ public class Manager
 	/** A 2d array, contains (on 2nd level) the list of controls that turn on the PostFilters
 	  * at the same 1st level place on PostFilters_Order */
 	protected String[][] PostFilters_Controls;
-	
+
 	/** This class is used as a TermPipelineAccessor, and this variable stores
 	  * the result of the TermPipeline run for that term. */
 	protected String pipelineOutput = null;
 
 	protected boolean CACHING_FILTERS = Boolean.parseBoolean(ApplicationSetup.getProperty("manager.caching.filters","false"));
-	
+
 	protected final boolean MATCH_EMPTY_QUERY = Boolean.parseBoolean(ApplicationSetup.getProperty("match.empty.query","false"));
 
 	/** Default constructor. Use the default index
@@ -235,10 +235,10 @@ public class Manager
 		//String def_c = null;
 		Defaults_Size = Default_Controls.size();
 	}
-	
+
 	protected static final String[] tinySingleStringArray = new String[0];
 	protected static final String[][] tinyDoubleStringArray = new String[0][0];
-	
+
 	/** load in the allowed postprocceses controls, and the order to run post processes in */
 	protected void load_postprocess_controls()
 	{
@@ -253,16 +253,16 @@ public class Manager
 			order_pp = tmp.split("\\s*,\\s*");
 		else
 			order_pp = new String[0];
-		
+
 		tmp = ApplicationSetup.getProperty("querying.postprocesses.controls", "").trim();
 		if (tmp.length() > 0)
 			control_pp = tmp.split("\\s*,\\s*");
 		else
 			control_pp = new String[0];
-		
+
 		//control_and_pp holds an array of pairs - control, pp, control, pp, control, pp
 		String[] control_and_pp = new String[control_pp.length*2]; int count = 0;
-		
+
 		//iterate through controls and pp names putting in 1d array
 		for(int i=0; i<control_pp.length; i++)
 		{
@@ -279,7 +279,7 @@ public class Manager
 		of controls that can turn that pf on */
 		ArrayList<String> pp_order = new ArrayList<String>();
 		ArrayList<String[]> pp_controls = new ArrayList<String[]>();
-		
+
 		for(int i=0; i<order_pp.length; i++)
 		{
 			ArrayList<String> controls_for_this_pp = new ArrayList<String>();
@@ -302,7 +302,7 @@ public class Manager
 		PostProcesses_Order= pp_order.toArray(tinySingleStringArray);
 		PostProcesses_Controls = pp_controls.toArray(tinyDoubleStringArray);
 	}
-	
+
 	/** load in the allowed postprocceses controls, and the order to run post processes in */
 	protected void load_preprocess_controls()
 	{
@@ -317,16 +317,16 @@ public class Manager
 			order_pp = tmp.split("\\s*,\\s*");
 		else
 			order_pp = new String[0];
-		
+
 		tmp = ApplicationSetup.getProperty("querying.preprocesses.controls", "").trim();
 		if (tmp.length() > 0)
 			control_pp = tmp.split("\\s*,\\s*");
 		else
 			control_pp = new String[0];
-		
+
 		//control_and_pp holds an array of pairs - control, pp, control, pp, control, pp
 		String[] control_and_pp = new String[control_pp.length*2]; int count = 0;
-		
+
 		//iterate through controls and pp names putting in 1d array
 		for(int i=0; i<control_pp.length; i++)
 		{
@@ -343,7 +343,7 @@ public class Manager
 		of controls that can turn that pf on */
 		ArrayList<String> pp_order = new ArrayList<String>();
 		ArrayList<String[]> pp_controls = new ArrayList<String[]>();
-		
+
 		for(int i=0; i<order_pp.length; i++)
 		{
 			ArrayList<String> controls_for_this_pp = new ArrayList<String>();
@@ -382,13 +382,13 @@ public class Manager
 			order_pf = tmp.split("\\s*,\\s*");
 		else
 			order_pf = new String[0];
-		
+
 		tmp = ApplicationSetup.getProperty("querying.postfilters.controls", "").trim();
 		if (tmp.length() > 0)
 			control_pf = tmp.split("\\s*,\\s*");
 		else
 			control_pf = new String[0];
-		
+
 		String[] control_and_pf = new String[control_pf.length*2]; int count = 0;
 		//iterate through controls and pf names putting in 1d array
 		for(int i=0; i<control_pf.length; i++)
@@ -422,7 +422,7 @@ public class Manager
 			{
 				pf_controls.add(controls_for_this_pf.toArray(tinySingleStringArray));
 				pf_order.add(tmpPF);
-			}			
+			}
 		}
 		//cast back to arrays
 		PostFilters_Order = pf_order.toArray(tinySingleStringArray);
@@ -437,7 +437,7 @@ public class Manager
 				.split("\\s*,\\s*");
 		synchronized (this) {
 			tpa = new BaseTermPipelineAccessor(pipes);
-		}		
+		}
 	}
 
 	/* -------------- factory methods for SearchRequest objects ---------*/
@@ -465,7 +465,7 @@ public class Manager
 		return (SearchRequest)q;
 	}
 
-	/** Ask for new SearchRequest object to be made, instantiated using the 
+	/** Ask for new SearchRequest object to be made, instantiated using the
  	  * specified query id, and that the specified query should be parsed.
  	  * @since 2.0
  	  * @param QueryID The request should be identified by QueryID
@@ -486,7 +486,7 @@ public class Manager
 		q.setOriginalQuery(query);
 		return q;
 	}
-	
+
 
 	/** Set the default values for the controls of this new search request
 	 *  @param srq The search request to have the default set to. This is
@@ -505,7 +505,7 @@ public class Manager
 	public Index getIndex() {
 		return index;
 	}
-	
+
 	/** Provide a common interface for changing property values.
 	  * @param key Key of property to set
 	  * @param value Value of property to set */
@@ -545,7 +545,7 @@ public class Manager
 			rq.setEmpty(true);
 			return;
 		}
-		
+
 		/*if(ApplicationSetup.getProperty("querying.manager.sendlang","").equals("true"))
 		{
 			String lang = rq.getControl("lang").toLowerCase();
@@ -556,7 +556,7 @@ public class Manager
 					logger.debug("Sending marker through pipeline "+marker+lang);
 				}
 				pipelineTerm(marker+lang);
-				
+
 			}
 		}*/
 		synchronized(this) {
@@ -564,7 +564,7 @@ public class Manager
 			tpa.resetPipeline();
 		}
 		Map<String,String> controls = rq.getControlHashtable();
-			
+
 		for(int i=0; i<PreProcesses_Order.length; i++)
 		{
 			String PreProcesses_Name = PreProcesses_Order[i];
@@ -591,7 +591,7 @@ public class Manager
 		if ((lastPP = ApplicationSetup.getProperty("querying.lastpreprocess",null)) != null)
 		{
 			getPreProcessModule(lastPP).process(this, srq);
-		}		
+		}
 
 		if (! rtr)
 		{
@@ -608,7 +608,7 @@ public class Manager
 		}
 
 		MatchingQueryTerms queryTerms = new MatchingQueryTerms(rq.getQueryID(), rq);
-		
+
 		query.obtainQueryTerms(queryTerms);
 		rq.setMatchingQueryTerms(queryTerms);
 	}
@@ -623,7 +623,7 @@ public class Manager
 		{
 			//TODO some exception handling here for not found models
 			Model wmodel = getWeightingModel(rq);
-			
+
 			/* craigm 05/09/2006: only set the parameter of the weighting model
 			 * if it was explicitly set if c_set control is set to true. Otherwise
 			 * allow the weighting model to assume it's default value.
@@ -633,23 +633,23 @@ public class Manager
 			{
 				wmodel.setParameter(Double.parseDouble(rq.getControl("c")));
 			}
-			
+
 			Matching matching = getMatchingModel(rq);
-			
+
 			if (logger.isDebugEnabled()){
 				logger.debug("weighting model: " + wmodel.getInfo());
 			}
 			MatchingQueryTerms mqt = rq.getMatchingQueryTerms();
 			mqt.setDefaultTermWeightingModel((WeightingModel)wmodel);
 			Query q = rq.getQuery();
-			
+
 			/* now propagate fields into requirements, and apply boolean matching
 			   for the decorated terms. */
 			ArrayList<Query> requirement_list_all = new ArrayList<Query>();
 			ArrayList<Query> requirement_list_positive = new ArrayList<Query>();
 			ArrayList<Query> requirement_list_negative = new ArrayList<Query>();
 			ArrayList<Query> field_list = new ArrayList<Query>();
-			
+
 			// Issue TREC-370
 			q.getTermsOf(RequirementQuery.class, requirement_list_all, true);
 			for (Query query : requirement_list_all ) {
@@ -666,10 +666,10 @@ public class Manager
 				//System.err.println(negativeQuery.toString()+" was a negative requirement");
 				mqt.setTermProperty(negativeQuery.toString(), Double.NEGATIVE_INFINITY);
 			}
-			
-			
+
+
 			q.getTermsOf(FieldQuery.class, field_list, true);
-			for (int i=0; i<field_list.size(); i++) 
+			for (int i=0; i<field_list.size(); i++)
 				if (!requirement_list_positive.contains(field_list.get(i)))
 					requirement_list_positive.add(field_list.get(i));
 
@@ -682,11 +682,11 @@ public class Manager
 				}
 				for (int i=0; i<field_list.size(); i++) {
 					if(logger.isDebugEnabled()){
-					logger.debug("field: " + ((TermInFieldModifier)field_list.get(i)).getName()); 
+					logger.debug("field: " + ((TermInFieldModifier)field_list.get(i)).getName());
 					}
 				}
 			}*/
-		
+
 			if (requirement_list_positive.size()>0) {
 				mqt.addDocumentScoreModifier(new BooleanScoreModifier(requirement_list_positive));
 			}
@@ -695,7 +695,7 @@ public class Manager
 			mqt.normaliseTermWeights();
 			try{
 				ResultSet outRs = matching.match(rq.getQueryID(), mqt);
-				
+
 				//check to see if we have any negative infinity scores that should be removed
 				int badDocuments = 0;
 				for (int i = 0; i < outRs.getResultSize(); i++) {
@@ -703,7 +703,7 @@ public class Manager
 						badDocuments++;
 				}
 				logger.debug("Found "+badDocuments+" documents with a score of negative infinity in the result set returned, they will be removed.");
-				
+
 				//now crop the collectionresultset down to a query result set.
 				rq.setResultSet(outRs.getResultSet(0, outRs.getResultSize()-badDocuments));
 			} catch (IOException ioe) {
@@ -725,7 +725,7 @@ public class Manager
 	{
 		Request rq = (Request)srq;
 		Map<String,String> controls = rq.getControlHashtable();
-		
+
 		for(int i=0; i<PostProcesses_Order.length; i++)
 		{
 			String PostProcesses_Name = PostProcesses_Order[i];
@@ -754,8 +754,8 @@ public class Manager
 			getPostProcessModule(lastPP).process(this, srq);
 		}
 	}
-	
-	
+
+
 	/** Runs the PostFilter modules in order added. PostFilter modules
 	  * filter the resultset. Examples might be removing results that don't have
 	  * a hostname ending in the required postfix (site), or document ids that don't match
@@ -766,7 +766,7 @@ public class Manager
 		Request rq = (Request)srq;
 		PostFilter[] filters = getPostFilters(rq);
 		final int filters_length = filters.length;
-		
+
 		//the results to filter
 		ResultSet results = rq.getResultSet();
 
@@ -794,7 +794,7 @@ public class Manager
 		{
 			if (Start != 0 && length != ResultsSize)
 				rq.setResultSet( results.getResultSet(Start, length) );
-			if (logger.isDebugEnabled()) { 
+			if (logger.isDebugEnabled()) {
 				logger.debug("No filters, just Crop: "+Start+", length"+length);
 				logger.debug("Resultset is now "+results.getScores().length + " long");
 			}
@@ -806,7 +806,7 @@ public class Manager
 		{
 			filters[i].new_query(this, srq, results);
 		}
-		
+
 		int doccount = -1;//doccount is zero-based, so 0 means 1 document
 		TIntArrayList docatnumbers = new TIntArrayList();//list of resultset index numbers to keep
 		byte docstatus; int thisDocId;
@@ -857,7 +857,7 @@ public class Manager
 		}
 		//since doccount is zero-based, we add one so that it
 		//corresponds to the real number of documents.
-		doccount++; 
+		doccount++;
 		rq.setNumberOfDocumentsAfterFiltering(doccount);
 		if (docatnumbers.size() < docids.length)
 		{
@@ -895,15 +895,15 @@ public class Manager
 		}
 		return postfilters.toArray(new PostFilter[0]);
 	}
-	
+
 	/*-------------------------------- helper methods -----------------------------------*/
 	//helper methods. These get the appropriate modules named Name of the appropate type
 	//from a hashtable cache, or instantiate them should they not exist.
 	/** Returns the matching model indicated to be used, based on the Index and the Matching
-	 * name specified in the passed Request object. Caches already 
+	 * name specified in the passed Request object. Caches already
 	  * instantiaed matching models in Map Cache_Matching.
 	  * If the matching model name doesn't contain '.', then NAMESPACE_MATCHING
-	  * is prefixed to the name. 
+	  * is prefixed to the name.
 	  * @param rq The request indicating the Matching class, and the corresponding
 	  * instance to use
 	  * @return null If an error occurred obtaining the matching class
@@ -914,7 +914,7 @@ public class Manager
 		Index _index = rq.getIndex();
 		String ModelName = rq.getMatchingModel();
 		//add the namespace if the modelname is not fully qualified
-		
+
 		final String ModelNames[] = ModelName.split("\\s*,\\s*");
 		final int modelCount = ModelNames.length;
 		StringBuilder entireSequence = new StringBuilder();
@@ -950,14 +950,14 @@ public class Manager
 						ModelNames[i] = "org.terrier.matching.daat.Full";
 					Class<? extends Matching> formatter = Class.forName(ModelNames[i], false, this.getClass().getClassLoader()).asSubclass(Matching.class);
 					//get the correct constructor - an Index class in this case
-					
+
 					Class<?>[] params;
 					Object[] params2;
 					if (first)
 					{
 						params = new Class[1];
 						params2 = new Object[1];
-						
+
 						params[0] = Index.class;
 						params2[0] = _index;
 					}
@@ -965,7 +965,7 @@ public class Manager
 					{
 						params = new Class[2];
 						params2 = new Object[2];
-						
+
 						params[0] = Index.class;
 						params2[0] = _index;
 						params[1] = Matching.class;
@@ -996,11 +996,11 @@ public class Manager
 	protected Model getWeightingModel(Request rq) {
 		return WeightingModelFactory.newInstance(rq.getWeightingModel(), rq.getIndex());
 	}
-	
+
 	/** Returns the PostProcess named Name. Caches already
 	  * instantiaed classes in Hashtable Cache_PostProcess.
-	  * If the post process class name doesn't contain '.', 
-	  * then NAMESPACE_POSTPROCESS is prefixed to the name. 
+	  * If the post process class name doesn't contain '.',
+	  * then NAMESPACE_POSTPROCESS is prefixed to the name.
 	  * @param Name The name of the post process to return. */
 	protected PostProcess getPostProcessModule(String Name)
 	{
@@ -1009,7 +1009,7 @@ public class Manager
 			Name = NAMESPACE_POSTPROCESS +Name;
 		else if (Name.startsWith("uk.ac.gla.terrier"))
 			Name = Name.replaceAll("uk.ac.gla.terrier", "org.terrier");
-		
+
 		//check for already loaded models
 		rtr = Cache_PostProcess.get(Name);
 		if (rtr == null)
@@ -1027,11 +1027,11 @@ public class Manager
 		}
 		return rtr;
 	}
-	
+
 	/** Returns the PostProcess named Name. Caches already
 	  * instantiaed classes in Hashtable Cache_PostProcess.
-	  * If the post process class name doesn't contain '.', 
-	  * then NAMESPACE_PREPROCESS is prefixed to the name. 
+	  * If the post process class name doesn't contain '.',
+	  * then NAMESPACE_PREPROCESS is prefixed to the name.
 	  * @param Name The name of the post process to return. */
 	protected Process getPreProcessModule(String Name)
 	{
@@ -1040,7 +1040,7 @@ public class Manager
 			Name = NAMESPACE_PREPROCESS +Name;
 		else if (Name.startsWith("uk.ac.gla.terrier"))
 			Name = Name.replaceAll("uk.ac.gla.terrier", "org.terrier");
-		
+
 		//check for already loaded models
 		rtr = Cache_PreProcess.get(Name);
 		if (rtr == null)
@@ -1058,7 +1058,7 @@ public class Manager
 		}
 		return rtr;
 	}
-	
+
 	/** Returns the post filter class named ModelName. Caches already
 	  * instantiaed matching models in Hashtable Cache_PostFilter.
 	  * If the matching model name doesn't contain '.',
@@ -1071,7 +1071,7 @@ public class Manager
 			Name = NAMESPACE_POSTFILTER +Name;
 		else if (Name.startsWith("uk.ac.gla.terrier"))
 			Name = Name.replaceAll("uk.ac.gla.terrier", "org.terrier");
-		
+
 		//check for already loaded post filters
 		if (CACHING_FILTERS)
 			rtr = Cache_PostFilter.get(Name);
@@ -1091,29 +1091,29 @@ public class Manager
 		}
 		return rtr;
 	}
-	
+
 	/**
-	 * Returns information about the weighting models and 
+	 * Returns information about the weighting models and
 	 * the post processors used for the given search request.
-	 * @param srq the search request for which we obtain 
+	 * @param srq the search request for which we obtain
 	 *		the information.
-	 * @return String information about the weighting models 
+	 * @return String information about the weighting models
 	 *		 and the post processors used.
 	 */
 	public String getInfo(SearchRequest srq) {
-		Request rq = (Request)srq; 
+		Request rq = (Request)srq;
 		StringBuilder info = new StringBuilder();
-		
+
 		//obtaining the weighting model information
 		Model wmodel = getWeightingModel(rq);
 		final String param = rq.getControl("c");
 		if (rq.getControl("c_set").equals("true") && param.length() > 0)
 			wmodel.setParameter(Double.parseDouble(param));
 		info.append(wmodel.getInfo());
-		
+
 		//obtaining the post-processors information
 		Map<String,String> controls = rq.getControlHashtable();
-		
+
 		for(int i=0; i<PostProcesses_Order.length; i++)
 		{
 			String PostProcesses_Name = PostProcesses_Order[i];
@@ -1132,7 +1132,7 @@ public class Manager
 					break;
 				}
 			}
-		}		
+		}
 		return info.toString();
 	}
 }

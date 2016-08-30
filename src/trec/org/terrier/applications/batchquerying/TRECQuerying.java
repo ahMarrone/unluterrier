@@ -632,7 +632,6 @@ public class TRECQuerying {
 	 */
 	public SearchRequest processQuery(String queryId, String query,
 			double cParameter, boolean c_set) {
-
 		if (removeQueryPeriods && query.indexOf(".") > -1) {
 			logger.warn("Removed . from query");
 			query = query.replaceAll("\\.", " ");
@@ -673,7 +672,7 @@ public class TRECQuerying {
 		if (logger.isInfoEnabled())
 			logger.info("Processing query: " + queryId + ": '" + query + "'");
 		matchingCount++;
-		queryingManager.runPreProcessing(srq);
+		//queryingManager.runPreProcessing(srq);
 		queryingManager.runMatching(srq);
 		queryingManager.runPostProcessing(srq);
 		queryingManager.runPostFilters(srq);
