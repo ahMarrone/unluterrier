@@ -23,13 +23,6 @@ public class BooleanManager extends Manager{
       setDefaults(q);
     q.setQueryID(QueryID);
     q.setIndex(this.index);
-    try{
-      System.out.println("pre parse");
-      System.out.println(query);
-      LazyQueryParser.parseQuery(query, q);	 // CAMBIO
-    } catch (QueryParserException qpe) {
-      logger.error("Error while parsing the query.",qpe);
-    }
     q.setOriginalQuery(query);
     return q;
   }
@@ -41,10 +34,9 @@ public class BooleanManager extends Manager{
 
   public void runMatching(SearchRequest srq){
     Request rq = (Request)srq;
-    Query q = rq.getQuery();
-    System.out.println(q.parseTree());
-    System.out.println("matching!!!");
-    rq.setResultSet(new QueryResultSet(0));
+    String query = rq.getOriginalQuery();
+    Queue queryPostfix = ShuntingYard.toPostfix(query);
+    rq.setResultSet(new QueryResultSet(1));
   }
 
 

@@ -52,12 +52,10 @@ public class LazyQueryParser extends QueryParser
 
     public static Query parseQuery(String query) throws QueryParserException
     {
-				Queue queryPostfix = ShuntingYard.toPostfix(query);
-				MultiTermQuery rtr = new MultiTermQuery();
-				System.out.println("QUEUE");
-	      System.out.println(queryPostfix);
-				rtr.add((String)queryPostfix.poll());
-				System.out.println(rtr);
-        return ((Query)rtr);
+		/*MultiTermQuery rtr = new MultiTermQuery();
+		rtr.add((String)queryPostfix.poll());
+		System.out.println(rtr);
+        return ((Query)rtr);*/
+        return new SingleTermQuery();
     }
 }
