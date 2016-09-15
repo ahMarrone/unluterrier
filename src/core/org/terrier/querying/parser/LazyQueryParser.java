@@ -26,17 +26,6 @@
 
 package org.terrier.querying.parser;
 
-import antlr.TokenStreamSelector;
-import org.terrier.querying.parser.TerrierLexer;
-import org.terrier.querying.parser.TerrierFloatLexer;
-import org.terrier.querying.parser.TerrierQueryParser;
-import java.io.StringReader;
-import org.terrier.querying.SearchRequest;
-
-
-import java.util.Queue;
-import org.terrier.querying.rpn.ShuntingYard;
-
 /** Useful class to parse the query. (We should have had this class years ago).
  * This class replaces all replicated code about how to parse a String query into
  * a Query tree, and add it to a pre-existing search request. This is most often

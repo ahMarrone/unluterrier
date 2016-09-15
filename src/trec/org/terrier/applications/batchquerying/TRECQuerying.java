@@ -672,7 +672,7 @@ public class TRECQuerying {
 		if (logger.isInfoEnabled())
 			logger.info("Processing query: " + queryId + ": '" + query + "'");
 		matchingCount++;
-		//queryingManager.runPreProcessing(srq);
+		queryingManager.runPreProcessing(srq);
 		queryingManager.runMatching(srq);
 		queryingManager.runPostProcessing(srq);
 		queryingManager.runPostFilters(srq);
