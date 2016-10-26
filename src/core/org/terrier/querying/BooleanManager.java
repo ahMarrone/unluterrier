@@ -15,8 +15,15 @@ import org.terrier.querying.parser.Query;
 import org.terrier.querying.parser.MultiTermQuery;
 import org.terrier.matching.models.BooleanModel;
 
+import org.terrier.utility.ApplicationSetup;
+import org.terrier.structures.cache.intersectioncache.IntersectionCache;
+import org.terrier.structures.cache.intersectioncache.NullIntersectionCache;
+
 import java.lang.NullPointerException;
 import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.util.*;
@@ -24,8 +31,15 @@ import java.lang.Integer;
 
 public class BooleanManager extends Manager{
 
+
+  /** The logger used */
+  protected static final Logger logger = LoggerFactory.getLogger(BooleanManager.class);
+
+  protected IntersectionCache intersectionCache;
+
   public BooleanManager(Index _index){
     super(_index);
+    this.intersectionCache = getIntersectionCache();
   }
 
   public SearchRequest newSearchRequest(String QueryID, String query)
@@ -78,6 +92,24 @@ public class BooleanManager extends Manager{
     return ret;
   }
 
+  protected IntersectionCache getIntersectionCache() {
+    IntersectionCache rtr = null;
+    try {
+      String className = ApplicationSetup.getProperty(
+          "trec.querying.intersectioncache", NullIntersectionCache.class
+              .getName());
+      if (!className.contains("."))
+        className = "org.terrier.applications.TRECQuerying$"
+            + className;
+      else if (className.startsWith("uk.ac.gla.terrier"))
+        className = className.replaceAll("uk.ac.gla.terrier", "org.terrier");
+      rtr = Class.forName(className).asSubclass(IntersectionCache.class).newInstance();
+    } catch (Exception e) {
+      logger.error("", e);
+    }
+    return rtr;
+  }
+
 
 
   ////////////////////////////////////////////////////////////////
@@ -92,38 +124,58 @@ public class BooleanManager extends Manager{
   // Takes a postfix query (queue), and return a resultset of doc id's
   private List<Integer> match(Queue<String> queryPostfix){
       // Stack of temporary results. RPN
-      Deque<List> outStack = new ArrayDeque<List>();
+      Deque<Object> outStack = new ArrayDeque<Object>();
       //
       List<Integer> matchResult = null;
       List<Integer> tmpResult = null;
-      List<Integer> first = null;
-      List<Integer> second = null;
+      Object first = null;
+      Object second = null;
       for (String token : queryPostfix){
         if (BooleanManager.isBooleanOperator(token)){
           switch (token){
             case "AND" :
-                      first = this.getPostingIfString(outStack.pop());
-                      second = this.getPostingIfString(outStack.pop());  
-                      tmpResult = (first.size() <= second.size()) ? BooleanModel.doAND(first,second) : BooleanModel.doAND(second, first); 
+                      first = outStack.pop();
+                      second = outStack.pop();
+                      tmpResult = this.checkIntersectionCache(first, second);
+                      if (tmpResult == null){
+                        List<Integer> firstPosting = this.getPostingIfString(first);
+                        List<Integer> secondPosting = this.getPostingIfString(second);  
+                        tmpResult = (firstPosting.size() <= secondPosting.size()) ? BooleanModel.doAND(firstPosting,secondPosting) : BooleanModel.doAND(secondPosting, firstPosting); 
+                        this.intersectionCache.add(first + " AND "+ second, tmpResult);
+                      }
                       break;
             case "OR"  :
-                      first = this.getPostingIfString(outStack.pop());
+                      /*first = this.getPostingIfString(outStack.pop());
                       second = this.getPostingIfString(outStack.pop());
-                      tmpResult = BooleanModel.doOR(first, second);
+                      tmpResult = BooleanModel.doOR(first, second);*/
                       break;
           }
           outStack.push(tmpResult);
         } else {
-          outStack.push(this.getPostingList(token));
+          outStack.push(token);
         }
       }
       if (outStack.size() > 1 ){ // Incorrect Query
           System.out.println(("WRONG QUERY!"));
           matchResult =  new ArrayList();
       } else {
-        matchResult = outStack.pop();
+        // Aqui el stack tiene un elemento, el cual puede ser un termino, o una postinglist.
+        matchResult = this.getPostingIfString(outStack.pop());
       }
       return matchResult;
+  }
+
+
+  private List<Integer> checkIntersectionCache(Object term1, Object term2){
+      // REVISAR! casa AND perro y casa AND perro son dos entradas distintas en la cache!
+      if((term1 instanceof String) && (term2 instanceof String)){
+          List<Integer> result = this.intersectionCache.checkCache(term1 + " AND " + term2);
+          if (result != null){
+            logger.info("INTERSECTION CACHE HIT!: "+ term1 + " AND " + term2);
+            return result;
+          }
+      }
+      return null;
   }
 
 
@@ -200,7 +252,6 @@ public class BooleanManager extends Manager{
               return true;
           }
       }
-
       return false;
   }
 
