@@ -1,12 +1,24 @@
 <DOC>
-<DOCNO>1</DOCNO>
-hola casa perro
+<DOCNO>0</DOCNO>
+tomate televisor perro casa celular
 </DOC>
 <DOC>
-<DOCNO>2</DOCNO>
+<DOCNO>1</DOCNO>
 hola mate lapiz perro
 </DOC>
 <DOC>
+<DOCNO>2</DOCNO>
+lapiz casa celular mouse etiqueta laser
+</DOC>
+<DOC>
 <DOCNO>3</DOCNO>
-lapiz casa perro mouse
+etiqueta laser monitor
+</DOC>
+<DOC>
+<DOCNO>4</DOCNO>
+teclado papa perro
+</DOC>
+<DOC>
+<DOCNO>5</DOCNO>
+celular perro casa
 </DOC>
