@@ -8,7 +8,6 @@ public class BooleanModel{
 
 	public static List<Integer> doAND(List<Integer> t1, List<Integer> t2){
 		List<Integer> r = new ArrayList(); // resultset
-		// Sort by length. Minor first
 		for (Integer doc : t1) {
 			if (t2.contains(doc)){
 				r.add(doc);

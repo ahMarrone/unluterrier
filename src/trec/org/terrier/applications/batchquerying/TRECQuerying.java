@@ -662,18 +662,19 @@ public class TRECQuerying {
 		}
 
 		preQueryingSearchRequestModification(queryId, srq);
-		ResultSet rs = resultsCache.checkCache(srq);
-		if (rs != null){
-			logger.info("CACHE HIT!: "+ query);
-			((Request)srq).setResultSet(rs);
-		}
-
 
 		if (logger.isInfoEnabled())
 			logger.info("Processing query: " + queryId + ": '" + query + "'");
 		matchingCount++;
 		queryingManager.runPreProcessing(srq);
-		queryingManager.runMatching(srq);
+
+		ResultSet rs = resultsCache.checkCache(srq);
+		if (rs != null){
+			logger.info("CACHE HIT!: "+ query);
+			((Request)srq).setResultSet(rs);
+		} else {
+			queryingManager.runMatching(srq);
+		}
 		queryingManager.runPostProcessing(srq);
 		queryingManager.runPostFilters(srq);
 		resultsCache.add(srq);

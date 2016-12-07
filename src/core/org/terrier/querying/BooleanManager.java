@@ -18,6 +18,7 @@ import org.terrier.matching.models.BooleanModel;
 import org.terrier.utility.ApplicationSetup;
 import org.terrier.structures.cache.intersectioncache.IntersectionCache;
 import org.terrier.structures.cache.intersectioncache.NullIntersectionCache;
+import com.google.common.cache.CacheLoader;
 
 import java.lang.NullPointerException;
 import java.io.IOException;
@@ -36,6 +37,8 @@ public class BooleanManager extends Manager{
   protected static final Logger logger = LoggerFactory.getLogger(BooleanManager.class);
 
   protected IntersectionCache intersectionCache;
+
+  private String cacheStringQuery = null;
 
   public BooleanManager(Index _index){
     super(_index);
@@ -141,7 +144,7 @@ public class BooleanManager extends Manager{
                         List<Integer> firstPosting = this.getPostingIfString(first);
                         List<Integer> secondPosting = this.getPostingIfString(second);  
                         tmpResult = (firstPosting.size() <= secondPosting.size()) ? BooleanModel.doAND(firstPosting,secondPosting) : BooleanModel.doAND(secondPosting, firstPosting); 
-                        this.intersectionCache.add(first + " AND "+ second, tmpResult);
+                        this.addEntryToIntersectionCache(first, second, tmpResult);
                       }
                       break;
             case "OR"  :
@@ -156,7 +159,7 @@ public class BooleanManager extends Manager{
         }
       }
       if (outStack.size() > 1 ){ // Incorrect Query
-          System.out.println(("WRONG QUERY!"));
+          logger.info("WRONG QUERY");
           matchResult =  new ArrayList();
       } else {
         // Aqui el stack tiene un elemento, el cual puede ser un termino, o una postinglist.
@@ -169,13 +172,30 @@ public class BooleanManager extends Manager{
   private List<Integer> checkIntersectionCache(Object term1, Object term2){
       // REVISAR! casa AND perro y casa AND perro son dos entradas distintas en la cache!
       if((term1 instanceof String) && (term2 instanceof String)){
-          List<Integer> result = this.intersectionCache.checkCache(term1 + " AND " + term2);
+          String cacheStringQuery = this.constructCacheStringQuery((String)term1, (String)term2);
+          List<Integer> result = this.intersectionCache.checkCache(cacheStringQuery);
           if (result != null){
-            logger.info("INTERSECTION CACHE HIT!: "+ term1 + " AND " + term2);
+            logger.info("INTERSECTION CACHE HIT!: "+ cacheStringQuery);
             return result;
           }
       }
       return null;
+  }
+
+  private String constructCacheStringQuery(String t1, String t2){
+      String stringResult = null;    
+      if (t1.compareTo(t2) < 0){
+        stringResult = t1 + " AND " + t2;
+      } else {
+        stringResult = t2 + " AND " + t1;
+      }
+      return stringResult;
+  }
+
+  private void addEntryToIntersectionCache(Object term1, Object term2, List<Integer> value){
+    if((term1 instanceof String) && (term2 instanceof String)){
+      this.intersectionCache.add(this.constructCacheStringQuery((String)term1, (String)term2), value);
+    }
   }
 
 
@@ -201,7 +221,7 @@ public class BooleanManager extends Manager{
           postingDocs.add(Integer.valueOf(docno));
         }
       } catch (NullPointerException npe){
-        // Term does'nt exists in lexicon
+         // El termino no existe en el lexicon
       } catch (IOException e){
         System.out.println("ERROR - Error reading Posting List of term" + term);
       } finally {
