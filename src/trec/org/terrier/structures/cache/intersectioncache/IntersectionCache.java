@@ -11,4 +11,10 @@ public interface IntersectionCache {
 	void add(String q, List<Integer> intersectionResultset);
 	
 	void reset();
+	
+	int getHitCount();
+	
+	float getHitRatio();
+
+	int getNumberOfEntries();
 }

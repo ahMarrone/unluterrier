@@ -165,6 +165,9 @@ public class BooleanManager extends Manager{
         // Aqui el stack tiene un elemento, el cual puede ser un termino, o una postinglist.
         matchResult = this.getPostingIfString(outStack.pop());
       }
+      System.out.println("INTERSECTION CACHE HITS: " + this.intersectionCache.getHitCount());
+      System.out.println("INTERSECTION CACHE HIT RATIO: " + this.intersectionCache.getHitRatio());
+      System.out.println("INTERSECTION CACHE ENTRIES: " + this.intersectionCache.getNumberOfEntries());
       return matchResult;
   }
 
