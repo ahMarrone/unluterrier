@@ -157,6 +157,7 @@ public class BooleanManager extends Manager{
         } else {
           outStack.push(token);
         }
+        //System.out.println(outStack);
       }
       if (outStack.size() > 1 ){ // Incorrect Query
           logger.info("WRONG QUERY");

@@ -19,7 +19,7 @@ public class BasicIntersectionStrategy implements IntersectionStrategy{
             } else if (i == tokens.length-1) {
               newQuery.append(" AND "+tokens[i]);
             } else {
-              newQuery.insert(0," ( ");
+              newQuery.insert(0,"( ");
               newQuery.append(" AND "+tokens[i]+" )");
             }
             i++;
